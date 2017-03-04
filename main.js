@@ -3,6 +3,9 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+//Module to manage app menu
+const {Menu, MenuItem} = electron
+const menu = new Menu()
 
 const path = require('path')
 const url = require('url')
@@ -16,14 +19,44 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
   // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  // mainWindow.loadURL(url.format({
+  //   pathname: path.join(__dirname, 'index.html'),
+  //   protocol: 'file:',
+  //   slashes: true
+  // }))
+
+  mainWindow.loadURL('https://www.youtube.com/')
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
+
+    new BrowserWindow();
+    const menuTemplate = [
+    {
+      label: 'Electron',
+      submenu: [
+      {
+        role: 'undo'
+      },
+      {
+        role: 'redo'
+      }],
+    },
+    {
+      label: 'Download',
+      submenu: [
+      {
+        label: 'Quality mp4',
+        click () { require('electron').shell.openExternal('http://electron.atom.io') }
+      },
+      {
+        label: 'Quality mkv',
+        click () { console.log('mkv') }
+      }],
+    }
+    ]
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu);
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
